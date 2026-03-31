@@ -4,6 +4,7 @@ import Link from "next/link";
 import { teamMembers } from "@/lib/mockData";
 import { StatsCard } from "@/components/SharedComponents";
 import { useToast } from "@/components/PointsToast";
+import CIBCLogo from "@/components/CIBCLogo";
 
 export default function ManagerDashboard() {
   const { showToast } = useToast();
@@ -147,8 +148,11 @@ export default function ManagerDashboard() {
               ))}
             </div>
             <div className="bg-white rounded-xl p-4 border border-amber-100">
-              <p className="text-sm text-amber-800">
-                💡 <span className="font-medium">Suggested action:</span> Schedule a 15-min 1:1 to walk them through the Meeting Summarizer — most popular tool for your team
+              <p className="text-sm text-amber-800 flex items-start gap-3">
+                <span className="flex-shrink-0 mt-0.5">
+                  <CIBCLogo className="h-4 w-auto max-w-[80px]" aria-hidden />
+                </span>
+                <span><span className="font-medium">Suggested action:</span> Schedule a 15-min 1:1 to walk them through the Meeting Summarizer — most popular tool for your team</span>
               </p>
             </div>
           </div>

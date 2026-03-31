@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { divisions } from "@/lib/mockData";
 import { useToast } from "@/components/PointsToast";
+import CIBCLogo from "@/components/CIBCLogo";
 
 export default function ExecDashboard() {
   const { showToast } = useToast();
@@ -24,16 +25,14 @@ export default function ExecDashboard() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-8 h-8 rounded-lg bg-cibc-red flex items-center justify-center">
-                <span className="text-white text-sm">💡</span>
-              </div>
-              <span className="text-sm font-bold text-gray-400">CIBC SPARK</span>
+            <div className="flex items-center gap-3 mb-1">
+              <CIBCLogo className="h-7 w-auto max-w-[140px]" aria-label="CIBC" />
+              <span className="text-sm font-bold text-cibc-red border-l border-gray-200 pl-3">AI Hub</span>
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-cibc-dark">Executive AI Impact Dashboard</h1>
             <p className="text-gray-500 mt-1">Q1 2026 — Organization Wide</p>
           </div>
-          <span className="text-xs text-gray-400 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">Auto-generated from SPARK platform data</span>
+          <span className="text-xs text-gray-400 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200">Auto-generated from AI Hub platform data</span>
         </div>
 
         {/* Hero Metrics */}
@@ -174,7 +173,7 @@ export default function ExecDashboard() {
 
         {/* Barrier Insights */}
         <div className="bg-white rounded-3xl border border-gray-100 p-6 md:p-8 shadow-sm mb-8">
-          <h2 className="text-lg font-bold text-cibc-dark mb-4">💡 AI Insights for Leadership</h2>
+          <h2 className="text-lg font-bold text-cibc-dark mb-4">AI Insights for Leadership</h2>
           <div className="space-y-4">
             {[
               "Retail Banking adoption is 12% below target. Top barrier: Employees report feeling 'unsure which tools are approved.' Recommended action: Targeted awareness campaign with compliance-approved tool list.",

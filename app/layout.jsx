@@ -3,8 +3,11 @@ import Navbar from "@/components/Navbar";
 import { ToastProvider } from "@/components/PointsToast";
 
 export const metadata = {
-  title: "CIBC SPARK — AI Learning Platform",
-  description: "Your personalized AI learning journey at CIBC",
+  title: {
+    default: "CIBC AI Hub — Home",
+    template: "CIBC AI Hub — %s",
+  },
+  description: "CIBC internal AI adoption platform — tools, learning paths, and productivity for every employee.",
 };
 
 export default function RootLayout({ children }) {

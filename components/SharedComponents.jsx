@@ -96,7 +96,7 @@ export function LeaderboardTable({ data, compact = false }) {
               {!compact && (
                 <td className="px-4 py-3.5 hidden md:table-cell">
                   <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                    row.badge === "Champion" ? "bg-yellow-100 text-yellow-700" :
+                    row.badge === "CIBC AI Champion" ? "bg-yellow-100 text-yellow-700" :
                     row.badge === "Builder" ? "bg-purple-100 text-purple-700" :
                     row.badge === "Practitioner" ? "bg-blue-100 text-blue-700" :
                     "bg-gray-100 text-gray-600"

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import CIBCLogo from "@/components/CIBCLogo";
 
 function AnimatedCounter({ end, suffix = "", duration = 2000 }) {
   const [count, setCount] = useState(0);
@@ -28,37 +29,38 @@ function AnimatedCounter({ end, suffix = "", duration = 2000 }) {
     return () => clearInterval(timer);
   }, [started, end, duration]);
 
-  return <span ref={ref}>{typeof end === 'number' && end % 1 !== 0 ? count.toFixed(1) : count.toLocaleString()}{suffix}</span>;
+  return <span ref={ref}>{typeof end === "number" && end % 1 !== 0 ? count.toFixed(1) : count.toLocaleString()}{suffix}</span>;
 }
 
 export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        {/* Background decorations */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-cibc-red/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cibc-red/3 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3" />
+      <section className="relative overflow-hidden hero-enterprise-bg">
+        <div className="absolute inset-0 -z-10 pointer-events-none opacity-40">
+          <div className="absolute top-1/4 right-0 w-[min(520px,90vw)] h-[min(520px,90vw)] rounded-full bg-cibc-red/[0.03] blur-3xl" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24 md:pt-32 md:pb-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 md:pt-24 md:pb-28">
           <div className="max-w-3xl mx-auto text-center">
-            {/* Logo */}
-            <div className="flex items-center justify-center gap-3 mb-8 animate-fade-up opacity-0" style={{ animationDelay: "100ms", animationFillMode: "forwards" }}>
-              <div className="w-14 h-14 rounded-2xl bg-cibc-red flex items-center justify-center shadow-xl shadow-cibc-red/25">
-                <span className="text-3xl">💡</span>
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                <span className="text-cibc-dark">CIBC</span>{" "}
-                <span className="gradient-text">SPARK</span>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 mb-6 animate-fade-up opacity-0" style={{ animationDelay: "80ms", animationFillMode: "forwards" }}>
+              Internal — CIBC employees
+            </p>
+            {/* Logo + product name */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 mb-8 animate-fade-up opacity-0" style={{ animationDelay: "100ms", animationFillMode: "forwards" }}>
+              <CIBCLogo
+                className="h-12 md:h-14 w-auto max-w-[min(85vw,300px)]"
+                aria-label="CIBC"
+                priority
+              />
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-cibc-red sm:border-l sm:border-gray-200 sm:pl-5">
+                AI Hub
               </h1>
             </div>
 
             {/* Tagline */}
-            <h2 className="text-3xl md:text-5xl font-bold text-cibc-dark leading-tight mb-6 animate-fade-up opacity-0" style={{ animationDelay: "250ms", animationFillMode: "forwards" }}>
-              Your personalized AI learning{" "}
-              <span className="gradient-text">journey starts here</span>
+            <h2 className="text-2xl md:text-4xl font-bold text-cibc-dark leading-tight mb-6 animate-fade-up opacity-0" style={{ animationDelay: "250ms", animationFillMode: "forwards" }}>
+              Your Personalized AI Adoption Platform
             </h2>
 
             <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-2xl mx-auto animate-fade-up opacity-0" style={{ animationDelay: "400ms", animationFillMode: "forwards" }}>
@@ -69,15 +71,15 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up opacity-0" style={{ animationDelay: "550ms", animationFillMode: "forwards" }}>
               <Link
                 href="/onboarding"
-                className="bg-cibc-red text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-xl shadow-cibc-red/25 hover:shadow-2xl hover:shadow-cibc-red/35 hover:bg-cibc-red-dark transition-all duration-300 animate-pulse-ring"
+                className="bg-cibc-red text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg shadow-cibc-red/20 hover:bg-cibc-red-dark transition-all duration-300"
               >
                 Get Started →
               </Link>
               <Link
                 href="/manager"
-                className="text-gray-500 hover:text-cibc-dark px-6 py-4 rounded-2xl font-medium transition-colors"
+                className="text-gray-600 hover:text-cibc-dark px-6 py-4 rounded-xl font-medium transition-colors border border-transparent hover:border-gray-200"
               >
-                Manager/Exec Login →
+                Manager / Exec access →
               </Link>
             </div>
           </div>
@@ -85,9 +87,9 @@ export default function Home() {
       </section>
 
       {/* Stats Bar */}
-      <section className="bg-cibc-dark py-8">
+      <section className="bg-[#141414] py-10 border-t border-gray-800/80">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
             <div className="animate-count-up">
               <div className="text-3xl md:text-4xl font-bold text-white">
                 <AnimatedCounter end={45000} suffix="+" />
@@ -111,10 +113,10 @@ export default function Home() {
       </section>
 
       {/* Feature Highlights */}
-      <section className="py-20 md:py-28">
+      <section className="py-20 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <h3 className="text-3xl md:text-4xl font-bold text-cibc-dark mb-4">How SPARK Works</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-cibc-dark mb-4">How AI Hub Works</h3>
             <p className="text-gray-500 max-w-xl mx-auto">Three simple steps to transform how you work with AI</p>
           </div>
 
@@ -126,7 +128,7 @@ export default function Home() {
             ].map((feature, i) => (
               <div
                 key={i}
-                className={`${feature.color} rounded-3xl p-8 border card-hover`}
+                className={`${feature.color} rounded-2xl p-8 border card-hover`}
               >
                 <div className="text-4xl mb-5">{feature.icon}</div>
                 <h4 className="text-xl font-bold text-cibc-dark mb-3">{feature.title}</h4>
@@ -138,11 +140,11 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-cibc-dark py-10">
+      <footer className="bg-[#141414] py-10 border-t border-gray-800/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-2xl">💡</span>
-            <span className="font-bold text-white text-lg">CIBC <span className="text-cibc-red-light">SPARK</span></span>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-3">
+            <CIBCLogo className="h-9 w-auto max-w-[220px]" aria-label="CIBC" />
+            <span className="font-bold text-cibc-red-light text-lg sm:border-l sm:border-gray-600 sm:pl-4">AI Hub</span>
           </div>
           <p className="text-gray-500 text-sm">© 2026 CIBC. Internal use only. All rights reserved.</p>
         </div>

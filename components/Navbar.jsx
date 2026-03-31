@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getPoints, getLevel } from "@/lib/pointsSystem";
+import CIBCLogo from "@/components/CIBCLogo";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -30,13 +31,14 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 rounded-xl bg-cibc-red flex items-center justify-center shadow-md shadow-cibc-red/20 group-hover:shadow-lg group-hover:shadow-cibc-red/30 transition-shadow">
-              <span className="text-white text-lg">💡</span>
-            </div>
-            <span className="font-bold text-xl tracking-tight">
-              <span className="text-cibc-dark">CIBC</span>{" "}
-              <span className="text-cibc-red">SPARK</span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <CIBCLogo
+              className="h-8 w-auto max-w-[min(42vw,200px)] sm:max-w-[200px]"
+              aria-label="CIBC"
+              priority
+            />
+            <span className="font-bold text-lg sm:text-xl tracking-tight text-cibc-red border-l border-gray-200 pl-2 sm:pl-3">
+              AI Hub
             </span>
           </Link>
 
@@ -72,6 +74,9 @@ export default function Navbar() {
           <button
             className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition"
             onClick={() => setMenuOpen(!menuOpen)}
+            type="button"
+            aria-expanded={menuOpen}
+            aria-label="Toggle menu"
           >
             <div className="w-5 h-5 flex flex-col justify-center gap-1">
               <span className={`block h-0.5 bg-cibc-dark transition-all duration-200 ${menuOpen ? "rotate-45 translate-y-[3px]" : ""}`} />

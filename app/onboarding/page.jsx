@@ -116,7 +116,7 @@ export default function Onboarding() {
         {step === 0 && (
           <div className="text-center animate-fade-up opacity-0" style={{ animationFillMode: "forwards" }}>
             <div className="text-6xl mb-6">👋</div>
-            <h1 className="text-3xl md:text-4xl font-bold text-cibc-dark mb-4">Welcome to CIBC SPARK</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-cibc-dark mb-4">Welcome to CIBC AI Hub</h1>
             <p className="text-gray-500 text-lg mb-8">This takes 3 minutes. We&apos;ll build your personalized AI journey.</p>
           </div>
         )}

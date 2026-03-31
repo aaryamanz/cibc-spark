@@ -1,18 +1,91 @@
 "use client";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { tools } from "@/lib/mockData";
 import {
   getJourneyProgress, setJourneyProgress, addPoints, POINTS,
-  getPoints, unlockBadge, getUserProfile, getCompletedToolsCount,
+  getUserProfile, getCompletedToolsCount, unlockBadge,
 } from "@/lib/pointsSystem";
 import { useToast } from "@/components/PointsToast";
 import SafeUseBanner from "@/components/SafeUseBanner";
 import { ProgressBar } from "@/components/SharedComponents";
+import VideoEmbed from "@/components/VideoEmbed";
+
+const JOURNEY_STEPS = [
+  { label: "What Is It?", time: "~5 min" },
+  { label: "See It In Action", time: "~8 min" },
+  { label: "Try It Yourself", time: "~10 min" },
+  { label: "Quick Check", time: "~3 min" },
+];
+
+function JourneyStepper({ currentStep, maxStep, onStepClick }) {
+  return (
+    <div className="w-full overflow-x-auto pb-1">
+      <div className="min-w-[min(100%,520px)] max-w-2xl mx-auto">
+        <div className="flex items-center w-full px-1">
+          {JOURNEY_STEPS.map((s, i) => {
+            const completed = i < maxStep;
+            const locked = i > maxStep;
+            const current = currentStep === i && !locked;
+
+            return (
+              <Fragment key={s.label}>
+                <button
+                  type="button"
+                  onClick={() => !locked && onStepClick(i)}
+                  disabled={locked}
+                  className="flex flex-col items-center gap-1 flex-shrink-0 w-14 sm:w-16"
+                >
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                      completed
+                        ? "bg-cibc-red text-white shadow-sm"
+                        : current
+                        ? "bg-white border-2 border-cibc-red text-cibc-red shadow-sm"
+                        : "bg-gray-100 text-gray-400 border border-gray-200"
+                    }`}
+                  >
+                    {completed ? "✓" : i + 1}
+                  </div>
+                </button>
+                {i < JOURNEY_STEPS.length - 1 && (
+                  <div
+                    className={`flex-1 h-0.5 min-w-[6px] rounded-full self-center transition-colors ${
+                      maxStep > i ? "bg-cibc-red" : "bg-gray-200"
+                    }`}
+                    aria-hidden
+                  />
+                )}
+              </Fragment>
+            );
+          })}
+        </div>
+        <div className="grid grid-cols-4 gap-1 mt-3 text-center">
+          {JOURNEY_STEPS.map((s, i) => {
+            const locked = i > maxStep;
+            const current = currentStep === i && i <= maxStep;
+            return (
+              <div key={`lbl-${s.label}`} className="px-0.5">
+                <p
+                  className={`text-[10px] sm:text-xs font-medium leading-tight ${
+                    current ? "text-cibc-red" : locked ? "text-gray-300" : "text-gray-600"
+                  }`}
+                >
+                  {s.label}
+                </p>
+                <p className="text-[10px] text-gray-400 mt-0.5">{s.time}</p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function JourneyPage({ params }) {
-  const { toolId } = use(params);
+  const { toolId } = params;
   const router = useRouter();
   const { showToast } = useToast();
   const [tool, setTool] = useState(null);
@@ -21,13 +94,11 @@ export default function JourneyPage({ params }) {
   const [earnedPoints, setEarnedPoints] = useState(0);
   const [mounted, setMounted] = useState(false);
 
-  // Prompt playground state
   const [selectedTask, setSelectedTask] = useState("");
   const [selectedTone, setSelectedTone] = useState("Formal");
   const [generatedPrompt, setGeneratedPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
 
-  // Quiz state
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizPassed, setQuizPassed] = useState(false);
@@ -45,7 +116,7 @@ export default function JourneyPage({ params }) {
   }, [toolId, router]);
 
   const completeStep = (stepNum, pts) => {
-    if (maxStep >= stepNum + 1) return; // already completed
+    if (maxStep >= stepNum + 1) return;
     const newMax = stepNum + 1;
     setMaxStep(newMax);
     const completed = newMax >= 4;
@@ -101,13 +172,14 @@ export default function JourneyPage({ params }) {
 
   if (!mounted || !tool) return null;
 
-  const stepTabs = ["What Is It?", "See It In Action", "Try It Yourself", "Quick Check ✅"];
+  const goToStep = (i) => {
+    if (i <= maxStep) setCurrentStep(i);
+  };
 
   return (
     <div className="min-h-screen">
       <SafeUseBanner />
 
-      {/* Confetti */}
       {showConfetti && (
         <div className="fixed inset-0 pointer-events-none z-50 flex items-start justify-center">
           {Array.from({ length: 30 }).map((_, i) => (
@@ -129,7 +201,6 @@ export default function JourneyPage({ params }) {
       )}
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <Link href="/dashboard" className="text-sm text-gray-500 hover:text-cibc-dark transition-colors">
             ← Back to Dashboard
@@ -140,7 +211,6 @@ export default function JourneyPage({ params }) {
         </div>
 
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-          {/* Tool Header */}
           <div className="p-6 border-b border-gray-100">
             <div className="flex items-center justify-between">
               <div>
@@ -153,31 +223,22 @@ export default function JourneyPage({ params }) {
             </div>
           </div>
 
-          {/* Tabs */}
-          <div className="flex border-b border-gray-100 overflow-x-auto">
-            {stepTabs.map((tab, i) => (
-              <button
-                key={i}
-                onClick={() => i <= maxStep && setCurrentStep(i)}
-                disabled={i > maxStep}
-                className={`flex-shrink-0 px-5 py-3.5 text-sm font-medium transition-colors whitespace-nowrap ${
-                  currentStep === i
-                    ? "border-b-2 border-cibc-red text-cibc-red"
-                    : i <= maxStep
-                    ? "text-gray-500 hover:text-cibc-dark"
-                    : "text-gray-300 cursor-not-allowed"
-                }`}
-              >
-                {i < maxStep && "✓ "}{tab}
-              </button>
-            ))}
+          <div className="px-4 sm:px-6 pt-5 pb-2 border-b border-gray-100 bg-gray-50/50">
+            <JourneyStepper
+              currentStep={currentStep}
+              maxStep={maxStep}
+              onStepClick={goToStep}
+            />
           </div>
 
-          {/* Content */}
           <div className="p-6 md:p-8">
-            {/* STEP 1 — What Is It? */}
             {currentStep === 0 && (
               <div className="animate-fade-in space-y-6" style={{ animationFillMode: "forwards" }}>
+                <VideoEmbed
+                  url={tool.videoUrl}
+                  title="📹 Training video"
+                  duration="5 min"
+                />
                 <h2 className="text-xl font-bold text-cibc-dark">{tool.name}</h2>
                 {tool.whatIsIt.map((p, i) => (
                   <p key={i} className="text-gray-600 leading-relaxed">{p}</p>
@@ -200,6 +261,7 @@ export default function JourneyPage({ params }) {
                 </div>
                 {maxStep < 1 && (
                   <button
+                    type="button"
                     onClick={() => { completeStep(0, POINTS.COMPLETE_STEP1); setCurrentStep(1); }}
                     className="bg-cibc-red text-white px-6 py-3 rounded-xl font-semibold hover:bg-cibc-red-dark transition-colors"
                   >
@@ -209,10 +271,14 @@ export default function JourneyPage({ params }) {
               </div>
             )}
 
-            {/* STEP 2 — See It In Action */}
             {currentStep === 1 && (
               <div className="animate-fade-in space-y-6" style={{ animationFillMode: "forwards" }}>
                 <h2 className="text-xl font-bold text-cibc-dark">See It In Action</h2>
+                <VideoEmbed
+                  url={tool.walkthroughVideoUrl}
+                  title="📹 Live walkthrough"
+                  duration="8 min"
+                />
                 <p className="text-gray-500">Here are 3 real-world scenarios showing how {tool.name} can help you:</p>
                 {tool.examples.map((ex, i) => (
                   <div key={i} className="bg-gray-50 rounded-2xl p-5 space-y-3 border border-gray-100">
@@ -230,6 +296,7 @@ export default function JourneyPage({ params }) {
                 ))}
                 {maxStep < 2 && (
                   <button
+                    type="button"
                     onClick={() => { completeStep(1, POINTS.COMPLETE_STEP2); setCurrentStep(2); }}
                     className="bg-cibc-red text-white px-6 py-3 rounded-xl font-semibold hover:bg-cibc-red-dark transition-colors"
                   >
@@ -239,7 +306,6 @@ export default function JourneyPage({ params }) {
               </div>
             )}
 
-            {/* STEP 3 — Prompt Playground */}
             {currentStep === 2 && (
               <div className="animate-fade-in space-y-6" style={{ animationFillMode: "forwards" }}>
                 <h2 className="text-xl font-bold text-cibc-dark">Try It Yourself — Prompt Playground</h2>
@@ -279,6 +345,7 @@ export default function JourneyPage({ params }) {
                 </div>
 
                 <button
+                  type="button"
                   onClick={handleGenerate}
                   disabled={generating}
                   className="bg-cibc-red text-white px-6 py-3 rounded-xl font-semibold hover:bg-cibc-red-dark transition-colors disabled:opacity-50 w-full sm:w-auto"
@@ -291,6 +358,7 @@ export default function JourneyPage({ params }) {
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm font-semibold text-gray-700">Generated Prompt</span>
                       <button
+                        type="button"
                         onClick={() => {
                           navigator.clipboard.writeText(generatedPrompt);
                           showToast("Copied to clipboard!", "success");
@@ -306,6 +374,7 @@ export default function JourneyPage({ params }) {
 
                 {maxStep < 3 && generatedPrompt && (
                   <button
+                    type="button"
                     onClick={() => { completeStep(2, POINTS.COMPLETE_STEP3); setCurrentStep(3); }}
                     className="bg-cibc-red text-white px-6 py-3 rounded-xl font-semibold hover:bg-cibc-red-dark transition-colors"
                   >
@@ -315,7 +384,6 @@ export default function JourneyPage({ params }) {
               </div>
             )}
 
-            {/* STEP 4 — Quick Check */}
             {currentStep === 3 && (
               <div className="animate-fade-in space-y-6" style={{ animationFillMode: "forwards" }}>
                 {!quizPassed ? (
@@ -333,6 +401,7 @@ export default function JourneyPage({ params }) {
                             return (
                               <button
                                 key={oi}
+                                type="button"
                                 onClick={() => !quizSubmitted && setQuizAnswers((p) => ({ ...p, [qi]: oi }))}
                                 disabled={quizSubmitted}
                                 className={`w-full text-left px-4 py-3 rounded-xl border-2 text-sm font-medium transition-all ${
@@ -356,6 +425,7 @@ export default function JourneyPage({ params }) {
                     ))}
                     {!quizSubmitted && Object.keys(quizAnswers).length === tool.quiz.length && (
                       <button
+                        type="button"
                         onClick={handleQuizSubmit}
                         className="bg-cibc-red text-white px-6 py-3 rounded-xl font-semibold hover:bg-cibc-red-dark transition-colors"
                       >
@@ -366,6 +436,7 @@ export default function JourneyPage({ params }) {
                       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
                         <p className="text-amber-700 font-medium">Almost there! You need 2/3 correct to pass. Try again!</p>
                         <button
+                          type="button"
                           onClick={() => { setQuizSubmitted(false); setQuizAnswers({}); }}
                           className="mt-2 text-sm text-amber-700 font-medium underline"
                         >
