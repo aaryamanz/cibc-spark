@@ -236,7 +236,7 @@ export default function JourneyPage({ params }) {
               <div className="animate-fade-in space-y-6" style={{ animationFillMode: "forwards" }}>
                 <VideoEmbed
                   url={tool.videoUrl}
-                  title="📹 Training video"
+                  title="Introduction"
                   duration="5 min"
                 />
                 <h2 className="text-xl font-bold text-cibc-dark">{tool.name}</h2>
@@ -276,7 +276,7 @@ export default function JourneyPage({ params }) {
                 <h2 className="text-xl font-bold text-cibc-dark">See It In Action</h2>
                 <VideoEmbed
                   url={tool.walkthroughVideoUrl}
-                  title="📹 Live walkthrough"
+                  title="Live walkthrough"
                   duration="8 min"
                 />
                 <p className="text-gray-500">Here are 3 real-world scenarios showing how {tool.name} can help you:</p>

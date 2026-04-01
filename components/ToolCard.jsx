@@ -6,9 +6,29 @@ import { ProgressBar } from "./SharedComponents";
 export default function ToolCard({ tool, progress = 0, onMarkKnown }) {
   const catColor = categoryColors[tool.category] || categoryColors.Productivity;
   const diffColor = difficultyColors[tool.difficulty] || difficultyColors.Beginner;
+  const sp = tool.socialProof;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm card-hover flex flex-col">
+    <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm card-hover flex flex-col relative overflow-hidden">
+      {sp && (
+        <div
+          className="absolute top-4 right-4 z-10 animate-fade-in opacity-0"
+          style={{ animationDelay: "300ms", animationFillMode: "forwards" }}
+        >
+          <div className="flex items-center gap-2 rounded-full bg-white/90 backdrop-blur px-2.5 py-1.5 shadow-sm border border-gray-100">
+            <div
+              className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white"
+              style={{ backgroundColor: sp.color }}
+              aria-hidden
+            >
+              {sp.initials}
+            </div>
+            <span className="text-[11px] text-gray-600 whitespace-nowrap">
+              <span className="font-medium text-gray-700">{sp.name}</span> saved {sp.savings}
+            </span>
+          </div>
+        </div>
+      )}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${catColor.bg} ${catColor.text}`}>
