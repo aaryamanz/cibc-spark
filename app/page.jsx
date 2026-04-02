@@ -98,7 +98,7 @@ export default function Home() {
             </div>
             <div className="animate-count-up" style={{ animationDelay: "200ms" }}>
               <div className="text-3xl md:text-4xl font-bold text-white">
-                <AnimatedCounter end={10} />
+                <AnimatedCounter end={11} />
               </div>
               <div className="text-sm text-gray-400 mt-1">AI Tools Available</div>
             </div>
