@@ -1,14 +1,15 @@
 "use client";
 import { useState } from "react";
-import { divisions } from "@/lib/mockData";
+import { divisions, tools } from "@/lib/mockData";
 import { useToast } from "@/components/PointsToast";
 import CIBCLogo from "@/components/CIBCLogo";
 
 export default function ExecDashboard() {
   const { showToast } = useToast();
+  const toolCount = tools.length;
   const [approvals, setApprovals] = useState([
     { name: "Sarah Chen", dept: "Compliance & Risk", achievement: "Saved 47 hours this month — 6 full work days", manager: "Robert Kim", status: "pending" },
-    { name: "James Mitchell", dept: "Technology", achievement: "Completed all 11 AI tool certifications", manager: "Linda Park", status: "pending" },
+    { name: "James Mitchell", dept: "Technology", achievement: `Completed all ${toolCount} AI tool certifications`, manager: "Linda Park", status: "pending" },
     { name: "Raj Patel", dept: "Personal Banking", achievement: "Led team adoption from 25% to 67% in one month", manager: "David Chen", status: "pending" },
   ]);
 

@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import CIBCLogo from "@/components/CIBCLogo";
+import { tools } from "@/lib/mockData";
 
 function AnimatedCounter({ end, suffix = "", duration = 2000 }) {
   const [count, setCount] = useState(0);
@@ -33,6 +34,7 @@ function AnimatedCounter({ end, suffix = "", duration = 2000 }) {
 }
 
 export default function Home() {
+  const toolCount = tools.length;
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -98,7 +100,7 @@ export default function Home() {
             </div>
             <div className="animate-count-up" style={{ animationDelay: "200ms" }}>
               <div className="text-3xl md:text-4xl font-bold text-white">
-                <AnimatedCounter end={11} />
+                <AnimatedCounter end={toolCount} />
               </div>
               <div className="text-sm text-gray-400 mt-1">AI Tools Available</div>
             </div>
